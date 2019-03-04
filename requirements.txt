@@ -1,8 +1,13 @@
+dj-database-url
 Django
+django-heroku
 djangorestframework
 gunicorn
 mysqlclient
 pip
+psycopg2
 pytz
-setuptools 
+setuptools
+whitenoise
+
 
