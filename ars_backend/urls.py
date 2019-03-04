@@ -14,9 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path,include,re_path
+from django.conf.urls import  url
+from Ars.views import userApiView,LoginApiView,userDetailApiView,SessionListView,SessionView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/',include('Ars.urls'))
+    path('api/<str:session_key>/',include('Ars.urls')),
+    re_path(r'^api/sessions/$',SessionListView.as_view(),name='sessions'),
+    re_path(r'^api/sessions/(?P<pk>[0-9]+)/$',SessionView.as_view(),name='sessionsview'),
+    re_path(r'^users/$',userApiView.as_view(),name='users'),
+    re_path(r'^users/(?P<pk>[0-9]+)/$',userDetailApiView.as_view(),name='userdetails'),
+    re_path(r'^login/$',LoginApiView.as_view(),name='login')
 ]
