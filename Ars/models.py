@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class Session(models.Model):
 	status = models.CharField(max_length=25,default='running')
-	sesion_key = models.CharField(max_length=250, null=False)
+	session_key = models.CharField(max_length=250, null=False)
 	owner = models.ForeignKey(User,on_delete=models.CASCADE)
 
 class Submission(models.Model):

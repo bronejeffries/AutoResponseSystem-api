@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate
 from rest_framework import status
 from django.db.models import Q
 from django.contrib.auth.models import User
+from .decorators import check_session
 from .models import Session,Submission,Topic,Comment,Question,Option
 from .Serializers import UserSerializer,SessionSerializer,SubmissionSerializer,TopicSerializer,CommentSerializer,QuestionSerializer,OptionSerializer
 
@@ -117,8 +118,8 @@ class SessionListView(APIView):
     		new_session = SessionSerializer(data=request.data)
     		if new_session.is_valid():
     			new_session.save()
-    			return Response({'code':1,'response':new_session.data},status=status.HTTP_201_CREATED)
-    		return Response({'code':0,'response':new_session.errors},status=status.HTTP_400_BAD_REQUEST)
+    			return Response(new_session.data,status=status.HTTP_201_CREATED)
+    		return Response(new_session.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class SessionView(APIView):
 
@@ -136,8 +137,8 @@ class SubmissionView(APIView):
       # retrieves all submissions made
       # @params {Request} request
       # @return json response
-
-    def get(self,request):
+    @check_session 
+    def get(self,request,session_key):
       submissions = Submission.objects.all()
       serializer_class = SubmissionSerializer(submissions,many=True)
       return Response(serializer_class.data,status=status.HTTP_200_OK)
@@ -147,7 +148,8 @@ class SubmissionView(APIView):
       # @params {Request} request
       # @return json rsponse
 
-    def post(self,request):
+    @check_session  
+    def post(self,request,session_key):
       new_submission = SubmissionSerializer(data=request.data)
       if new_submission.is_valid():
         new_submission.save()
@@ -160,7 +162,9 @@ class SessionSubmissionview(APIView):
       # retrieves all submissions made in a sesion
       # @params {Request} request {Session} session
       # @return json response  
-    def get(self,request,session_pk):
+
+    @check_session
+    def get(self,request,session_key,session_pk):
       session = Session.get(id=session_pk)
       submissions = session.submission_set.all()
       serializer_class = SubmissionSerializer(submissions,many=True)
@@ -180,7 +184,8 @@ class SubmissionDetailsView(APIView):
       # @params {Request} request {Submission} pk
       # @returns json response
 
-    def get(self,request,pk):
+    @check_session
+    def get(self,request,session_key,pk):
       submission = self.get_submission(pk)
       if submission:
         return Response({'file_url':submission.file_upload.url},status=status.HTTP_200_OK)
@@ -191,7 +196,8 @@ class SubmissionDetailsView(APIView):
       # @params {Request} request {submission} pk
       # @returns  json progress message
 
-    def delete(self,request,pk):
+    @check_session 
+    def delete(self,request,session_key,pk):
       submission = self.get_submission(pk)
       if submission:
         if submission.delete():
@@ -206,7 +212,8 @@ class QuestionsView(APIView):
       # @params {Request} request
       # @return json response
 
-    def get(self,request):
+    @check_session
+    def get(self,request,session_key):
       queryset = Question.objects.all()
       serializer_class = QuestionSerializer(queryset,many=True)
       return Response(serializer_class.data,status=status.HTTP_200_OK)
@@ -216,11 +223,12 @@ class QuestionsView(APIView):
       # @params {Request} request 
       # @return json response
 
-    def post(self,request):
+    @check_session  
+    def post(self,request,session_key):
       new_question = QuestionSerializer(data=request.data)
       if new_question.is_valid():
         new_question.save()
-        return Response({'response':new_question.data},status=status.HTTP_201_CREATED)
+        return Response(new_question.data,status=status.HTTP_201_CREATED)
       return Response(new_question.errors,status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -238,11 +246,12 @@ class QuestionsDetailView(APIView):
       # @params {Request} request {Question} question
       # @return json response
 
-    def get(self,request,pk):
+    @check_session  
+    def get(self,request,session_key,pk):
       queryset = self.get_question(pk)
       if queryset:
           serializer_class = QuestionSerializer(queryset)
-          return Response({'question':serializer_class.data},status=status.HTTP_200_OK)
+          return Response(serializer_class.data,status=status.HTTP_200_OK)
       return Response(status=HTTP_204_NO_CONTENT)
 
 
@@ -251,7 +260,9 @@ class OptionsView(APIView):
     # retrieves all options
     # @params {Request} request
     # @returns json response
-    def get(self,request):
+
+    @check_session
+    def get(self,request,session_key):
       options = Option.objects.all()
       serializer_class = OptionSerializer(options,many=True)
       return Response(serializer_class.data,status=status.HTTP_200_OK)
@@ -261,7 +272,8 @@ class OptionsView(APIView):
     # @params {Request} request
     # @returns json created instance
 
-    def post(self,request):
+    @check_session
+    def post(self,request,session_key):
       new_option = OptionSerializer(data=request.data)
       if new_option.is_valid():
         new_option.save()
@@ -274,7 +286,8 @@ class QuestionOptions(APIView):
     # @params {Requset} request {Question} pk
     # @returns json response {Options} if exists
 
-    def get(self,request,question_pk):
+    @check_session
+    def get(self,request,session_key,question_pk):
       question = QuestionsDetailView.get_question(question_pk)
       if question:
         options = question.option_set.all()
@@ -297,7 +310,8 @@ class OptionDetailsView(APIView):
     # @params {Request} request {Option} pk
     # @returns Option json response
 
-    def get(self,request,pk):
+    @check_session
+    def get(self,request,session_key,pk):
       option = self.get_option(pk)
       if option:
         serializer_class = OptionSerializer(option)
@@ -308,7 +322,8 @@ class OptionDetailsView(APIView):
     # @params {Request} request {Option} pk
     # @returns json updated option
 
-    def put(self,request,pk):
+    @check_session
+    def put(self,request,session_key,pk):
       option = self.get_option(pk)
       if option:
         option.choices = int(option.choices) + int(1)
@@ -322,7 +337,8 @@ class CommentsView(APIView):
     # @params {Request} request 
     # @returns json response comments
 
-    def get(self,request):
+    @check_session
+    def get(self,request,session_key):
        comments = Comment.objects.all()
        serializer_class = CommentSerializer(comments,many=True)
        return Response(serializer_class.data,status=status.HTTP_200_OK)
@@ -332,7 +348,8 @@ class CommentsView(APIView):
     # @params {Request} request 
     # @returns json response
 
-    def post(self,request):
+    @check_session
+    def post(self,request,session_key):
       new_comment = CommentSerializer(data=request.data)
       if new_comment.is_valid():
         new_comment.save()
@@ -345,8 +362,8 @@ class QuestionCommentsView(APIView):
     # retrieves all comments to a specific question
     # @params {Request} request {Question} question_pk
     # @returns json response comments
-
-    def get(self,request,question_pk):
+    @check_session
+    def get(self,request,session_key,question_pk):
       question = QuestionsDetailView.get_question(question_pk)
       if question:
         comments = question.comment_set.all()
