@@ -23,7 +23,7 @@ urlpatterns = [
     path('api/<str:session_key>/',include('Ars.urls')),
     re_path(r'^api/sessions/$',SessionListView.as_view(),name='sessions'),
     re_path(r'^api/sessions/(?P<pk>[0-9]+)/$',SessionView.as_view(),name='sessionsview'),
-    re_path(r'^users/$',userApiView.as_view(),name='users'),
-    re_path(r'^users/(?P<pk>[0-9]+)/$',userDetailApiView.as_view(),name='userdetails'),
-    re_path(r'^login/$',LoginApiView.as_view(),name='login')
+    re_path(r'^api/users/$',userApiView.as_view(),name='users'),
+    re_path(r'^api/users/(?P<pk>[0-9]+)/$',userDetailApiView.as_view(),name='userdetails'),
+    re_path(r'^api/login/$',LoginApiView.as_view(),name='login')
 ]
