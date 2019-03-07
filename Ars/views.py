@@ -45,7 +45,7 @@ class userApiView(APIView):
             new_user = UserSerializer(data=request.data)
             if new_user.is_valid():
                 new_user.save()
-                return Response({'messages':"Registration successful",'code':1,'response':new_user.data},status=status.HTTP_201_CREATED)
+                return Response({'messages':"Registration successful",'code':1,'id':new_user.data['id']},status=status.HTTP_201_CREATED)
             return Response({'code':0,'response':new_user.errors},status= status.HTTP_400_BAD_REQUEST)
 
 
@@ -288,7 +288,7 @@ class QuestionOptions(APIView):
 
     @check_session
     def get(self,request,session_key,question_pk):
-      question = QuestionsDetailView.get_question(question_pk)
+      question = QuestionsDetailView.get_question(self,question_pk)
       if question:
         options = question.option_set.all()
         serializer_class = OptionSerializer(options,many=True)
@@ -343,7 +343,6 @@ class CommentsView(APIView):
        serializer_class = CommentSerializer(comments,many=True)
        return Response(serializer_class.data,status=status.HTTP_200_OK)
 
-
     # creates a new comment
     # @params {Request} request 
     # @returns json response
@@ -357,6 +356,7 @@ class CommentsView(APIView):
       return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
+
 class QuestionCommentsView(APIView):
 
     # retrieves all comments to a specific question
@@ -364,7 +364,7 @@ class QuestionCommentsView(APIView):
     # @returns json response comments
     @check_session
     def get(self,request,session_key,question_pk):
-      question = QuestionsDetailView.get_question(question_pk)
+      question = QuestionsDetailView.get_question(self,question_pk)
       if question:
         comments = question.comment_set.all()
         serializer_class = CommentSerializer(comments,many=True)
@@ -380,7 +380,7 @@ class LoginApiView(APIView):
         user = authenticate(username=username,password=password)
         if user is not None:
             logined_user = UserSerializer(user)
-            return Response({'message':"Login successful",'code':1,'response':logined_user.data['id'],
+            return Response({'message':"Login successful",'code':1,'id':logined_user.data['id'],
               # 'image':user.profiles.profile_pic.name
               })
         else:
