@@ -328,7 +328,8 @@ class OptionDetailsView(APIView):
       if option:
         option.choices = int(option.choices) + int(1)
         option.save()
-        return Response(option,status=status.HTTP_201_CREATED)
+        serializer_class = OptionSerializer(option)
+        return Response(serializer_class.data,status=status.HTTP_201_CREATED)
       return Response({'message':'invalid option'},status=status.HTTP_400_BAD_REQUEST)
 
 
