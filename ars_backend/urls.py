@@ -18,8 +18,11 @@ from django.urls import path,include,re_path
 from django.conf.urls import  url
 from Ars.views import userApiView,LoginApiView,userDetailApiView,SessionListView,SessionView
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',include('UserAuth.urls')),
+    path('moderator/',include('moderator.urls')),
     path('api/<str:session_key>/',include('Ars.urls')),
     re_path(r'^api/sessions/$',SessionListView.as_view(),name='sessions'),
     re_path(r'^api/sessions/(?P<pk>[0-9]+)/$',SessionView.as_view(),name='sessionsview'),

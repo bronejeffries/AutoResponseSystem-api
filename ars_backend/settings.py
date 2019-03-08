@@ -33,6 +33,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'Ars.apps.ArsConfig',
+    'UserAuth.apps.UserauthConfig',
+    'moderator.apps.ModeratorConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

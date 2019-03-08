@@ -15,3 +15,25 @@ def check_session(function):
 			return Response({"session_error":"Session not active"},status=status.HTTP_400_BAD_REQUEST)
 
 	return function_wrapper
+
+
+def Get_check(function):
+	
+	def wrapper(request,**kwargs):
+		if request is not None:
+			if request.method=="GET":
+				return function(request,**kwargs)
+			raise Exception("method not allowed.")
+		raise Exception("request is null")
+	return wrapper
+
+def Post_check(function):
+	def wrapper(request,**kwargs):
+		if request is not None:
+			if request.method=="POST":
+				return function(request,**kwargs)
+			raise Exception("method not allowed.")
+		raise Exception("request is null")
+	return wrapper
+
+
