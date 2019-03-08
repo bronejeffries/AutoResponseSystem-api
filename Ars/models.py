@@ -30,6 +30,6 @@ class Question(models.Model):
 
 class Option(models.Model):
 	option = models.CharField(max_length=350, null=False)
-	option_type = models.CharField(max_length=12,null=False)
+	option_type = models.CharField(max_length=12,null=True)
 	choices = models.IntegerField(default=0)
 	question = models.ForeignKey(Question,on_delete=models.CASCADE)
