@@ -268,25 +268,25 @@ class QuestionsView(APIView):
 
 class QuestionsDetailView(APIView):
 
-    def get_question(self,pk):
-      try:
-        question = Question.objects.get(id=pk)
-      except Question.DoesNotExist as e:
-        return False
-      else:
-        return question
+    def get_question(self, pk):
+        try:
+            question = Question.objects.get(id=pk)
+        except Question.DoesNotExist:
+            return False
+        else:
+            return question
 
-      # retrieves a specific question
-      # @params {Request} request {Question} question
-      # @return json response
+    # retrieves a specific question
+    # @params {Request} request {Question} question
+    # @return json response
 
-    @check_session  
-    def get(self,request,session_key,pk):
-      queryset = self.get_question(pk)
-      if queryset:
-          serializer_class = QuestionSerializer(queryset)
-          return Response(serializer_class.data,status=status.HTTP_200_OK)
-      return Response(status=HTTP_204_NO_CONTENT)
+    @check_session
+    def get(self, request, session_key, pk):
+        queryset = self.get_question(pk)
+        if queryset:
+            serializer_class = QuestionSerializer(queryset)
+            return Response(serializer_class.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class OptionsView(APIView):
@@ -296,23 +296,23 @@ class OptionsView(APIView):
     # @returns json response
 
     @check_session
-    def get(self,request,session_key):
-      options = Option.objects.all()
-      serializer_class = OptionSerializer(options,many=True)
-      return Response(serializer_class.data,status=status.HTTP_200_OK)
-
+    def get(self, request, session_key):
+        options = Option.objects.all()
+        serializer_class = OptionSerializer(options, many=True)
+        return Response(serializer_class.data, status=status.HTTP_200_OK)
 
     # creates new option
     # @params {Request} request
     # @returns json created instance
 
     @check_session
-    def post(self,request,session_key):
-      new_option = OptionSerializer(data=request.data)
-      if new_option.is_valid():
-        new_option.save()
-        return Response(new_option.data,status=status.HTTP_201_CREATED)
-      return Response(new_option.errors,status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, session_key):
+        new_option = OptionSerializer(data=request.data)
+        if new_option.is_valid():
+            new_option.save()
+            return Response(new_option.data, status=status.HTTP_201_CREATED)
+        return Response(new_option.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class QuestionOptions(APIView):
 
@@ -321,13 +321,13 @@ class QuestionOptions(APIView):
     # @returns json response {Options} if exists
 
     @check_session
-    def get(self,request,session_key,question_pk):
-      question = QuestionsDetailView.get_question(self,question_pk)
-      if question:
-        options = question.option_set.all()
-        serializer_class = OptionSerializer(options,many=True)
-        return Response(serializer_class.data,status=status.HTTP_200_OK)
-      return Response(status=HTTP_204_NO_CONTENT)
+    def get(self, request, session_key, question_pk):
+        question = QuestionsDetailView.get_question(self, question_pk)
+        if question:
+            options = question.option_set.all()
+            serializer_class = OptionSerializer(options, many=True)
+            return Response(serializer_class.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class OptionDetailsView(APIView):
