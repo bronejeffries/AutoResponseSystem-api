@@ -52,7 +52,6 @@
 						<input class="input100" type="password" name="password" placeholder="Password" required>
 						<span class="focus-input100" data-placeholder="&#xf191;"></span>
 					</div>
-
 					<div class="contact100-form-checkbox">
 						<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
 						<label class="label-checkbox100" for="ckb1">
@@ -64,15 +63,15 @@
 							Sign In
 						</button>
 					</div>
+										<div class="text-center p-t-90">
+						<a class="txt1" href="{% url 'UserAuth:signup' %}">
+							Don't have an account? Signup
+						</a>
+					</div>
 
 					<div class="text-center p-t-90">
 						<a class="txt1" href="#">
 							Forgot Password?
-						</a>
-					</div>
-					<div class="text-center p-t-90">
-						<a class="txt1" href="{% url 'UserAuth:signup' %}">
-							Don't have an account? Signup
 						</a>
 					</div>
 				</form>
