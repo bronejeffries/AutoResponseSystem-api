@@ -86,7 +86,7 @@ DATABASES = {
 }
 
 # DATABASES = {
-#    'default': {
+#     'default': {
 #        'ENGINE': 'django.db.backends.mysql',
 #        'NAME': 'ars',
 #        'USER':'root',

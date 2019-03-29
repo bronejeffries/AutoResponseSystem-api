@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from django.http import JsonResponse
 from django.contrib.auth import authenticate
 from rest_framework import status
+from django.shortcuts import render
 # from django.db.models import Q
 from django.contrib.auth.models import User
 from .decorators import check_session
@@ -11,6 +12,10 @@ from .Serializers import UserSerializer, SessionSerializer
 from .Serializers import SubmissionSerializer, TopicSerializer
 from .Serializers import CommentSerializer, QuestionSerializer
 from .Serializers import OptionSerializer
+from .Qr import GenerateQrCode
+import re
+import os
+import datetime
 
 # Create your views here.
 
@@ -159,7 +164,7 @@ class SessionView(APIView):
         def get(self, request, pk):
             queryset = Session.objects.filter(owner=pk)
             serializer_class = SessionSerializer(queryset, many=True)
-            return Response(serializer_class.data)
+            return Response(serializer_class.data, status=status.HTTP_200_OK)
 
 
 class SubmissionView(APIView):
@@ -288,6 +293,21 @@ class QuestionsDetailView(APIView):
             return Response(serializer_class.data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @check_session
+    def put(self, request, session_key, pk):
+        question = self.get_question(pk)
+        if question:
+            updatequestion = QuestionSerializer(question,
+                                                data=request.data)
+            if updatequestion.is_valid():
+                updatequestion.save()
+                return Response(updatequestion.data,
+                                status=status.HTTP_200_OK)
+            return Response(updatequestion.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message": "question not found"},
+                        status=status.HTTP_400_BAD_REQUEST)
+
 
 class OptionsView(APIView):
 
@@ -408,6 +428,29 @@ class QuestionCommentsView(APIView):
             return Response({'comments': serializer_class.data},
                             status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class GenerateQrCodeView(APIView):
+    @check_session
+    def post(self, request, session_key):
+        session_req = re.compile(r'([A-Za-z0-9]+)-([A-Za-z0-9]+)-([A-Za-z0-9]+)')
+        ssname = session_req.search(session_key).group(1)
+        timenow = datetime.datetime.now()
+        qrname = ssname + timenow.second() + timenow.hour()
+        newqr = GenerateQrCode(request.data['data'], qrname)
+        if newqr:
+            return Response({"name": qrname, "code": 1},
+                            status=status.HTTP_200_OK)
+        return Response({"code": 0}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class QrCodeDetails(APIView):
+    @check_session
+    def get(self, request, session_key, qrname):
+        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        storage_path = os.path.join(BASE_DIR, 'media/qrcodes')
+        image_path = os.path.join(storage_path, qrname + '.png')
+        return render(request, image_path, {})
 
 
 class LoginApiView(APIView):

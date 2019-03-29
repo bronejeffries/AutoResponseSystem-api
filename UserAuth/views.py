@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from django.urls import reverse 
-from Ars.decorators import Get_check , Post_check
+from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from Ars.Serializers import UserSerializer
+from rest_framework import status
 # Create your views here.
 
 def index(request):
@@ -22,7 +22,7 @@ def index(request):
 			login(request,user)
 			return HttpResponseRedirect(reverse('moderator:index'))
 		else:
-			return render(request,"UserAuth/index.html",context)
+			return render(request,"UserAuth/index.html",context,status=status.HTTP_400_BAD_REQUEST)
 	
 
 def signupview(request):
@@ -48,7 +48,3 @@ def signupview(request):
 				return HttpResponseRedirect(reverse('UserAuth:index'))
 			return render(request,"UserAuth/signup.html",context)
 		return render(request,"UserAuth/signup.html",context)
-
-
-
-

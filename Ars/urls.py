@@ -1,8 +1,8 @@
-from django.conf.urls import  url
-from .views import SessionListView,SessionView,QuestionsView,QuestionsDetailView,SessionSubmissionview,SubmissionView,SubmissionDetailsView,OptionsView,QuestionOptions,OptionDetailsView,CommentsView,QuestionCommentsView
+from django.conf.urls import url
+from .views import SessionListView, SessionView, QuestionsView, QuestionsDetailView, SessionSubmissionview, SubmissionView, SubmissionDetailsView, OptionsView, QuestionOptions, OptionDetailsView, CommentsView, QuestionCommentsView, GenerateQrCodeView, QrCodeDetails
 
 
-urlpatterns=[
+urlpatterns = [
 
 			url(r'^questions/$',QuestionsView.as_view(),name='questions'),
 			url(r'^questions/(?P<pk>[0-9]+)/$',QuestionsDetailView.as_view(),name='questionsdetails'),
@@ -14,6 +14,9 @@ urlpatterns=[
 			url(r'^options/$',OptionsView.as_view(),name='optionscreate'),
 			url(r'^question/(?P<question_pk>[0-9]+)/options/$',QuestionOptions.as_view(),name='question_options'),
 			url(r'^option/(?P<pk>[0-9]+)/$',OptionDetailsView.as_view(),name='optionsdetails'),
+
+			url(r'^qrcodes/$', GenerateQrCodeView.as_view(), name='generateqrcode'),
+			url(r'^qrcodes/(?P<qrname>[a-zA-Z0-9]+)/$', QrCodeDetails.as_view(), name='qrcode_details'),
 			
 			url(r'^comments/$',CommentsView.as_view(),name='commentscreate'),
 			url(r'^question/(?P<question_pk>[0-9]+)/comments/$',QuestionCommentsView.as_view(),name='questioncomments')

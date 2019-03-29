@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Session,Submission,Topic,Comment,Question,Option
+from .models import Session, Submission, Topic, Comment, Question, Option, Qrcodemodel
 from django.contrib.auth.models import User
 
 
@@ -61,4 +61,8 @@ class OptionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-        
+class QrcodemodelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Qrcodemodel
+        fields = '__all__'
