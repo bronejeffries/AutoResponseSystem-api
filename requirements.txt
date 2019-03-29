@@ -3,11 +3,13 @@ Django
 django-heroku
 djangorestframework
 gunicorn
+lxml
 mysqlclient
-pip
+Pillow
 psycopg2
+pypng
 pytz
-setuptools
+qrcode
+six
+uuid
 whitenoise
-
-
