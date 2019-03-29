@@ -45,6 +45,9 @@ def signupview(request):
 			serializer_class = UserSerializer(data=userdata)
 			if serializer_class.is_valid():
 				serializer_class.save()
+				print("signup successful!")
 				return HttpResponseRedirect(reverse('UserAuth:index'))
+			context['errors'] = serializer_class.errors
+			print(context)
 			return render(request,"UserAuth/signup.html",context)
 		return render(request,"UserAuth/signup.html",context)
