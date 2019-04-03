@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	  {% load staticfiles %}
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->	
+<!--===============================================================================================-->
 	<link rel="icon" type="image/png" href="{% static 'UserAuth/images/icons/favicon.ico' %}"/>
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{%static 'UserAuth/vendor/bootstrap/css/bootstrap.min.css' %}">
@@ -15,13 +15,13 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'UserAuth/fonts/iconic/css/material-design-iconic-font.min.css'%}">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{% static 'UserAuth/vendor/animate/animate.css'%}">
-<!--===============================================================================================-->	
+<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{% static 'UserAuth/vendor/css-hamburgers/hamburgers.min.css'%}">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{% static 'UserAuth/vendor/animsition/css/animsition.min.css'%}">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{% static 'UserAuth/vendor/select2/select2.min.css'%}">
-<!--===============================================================================================-->	
+<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href=" {% static 'UserAuth/vendor/daterangepicker/daterangepicker.css'%}">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{% static 'UserAuth/css/util.css'%}">
@@ -29,10 +29,10 @@
 <!--===============================================================================================-->
 </head>
 <body>
-	
 	<div class="limiter">
 		<div class="container-login100" style="background-image: url('{% static 'UserAuth/images/bg-01.jpg' %}');">
 			<div class="wrap-login100">
+					{% include 'moderator/partials/success.html' %}
 				<form class="login100-form validate-form" method="post" action="">
 					{% csrf_token %}
 					<span class="login100-form-logo">
@@ -78,10 +78,10 @@
 			</div>
 		</div>
 	</div>
-	
+
 
 	<div id="dropDownSelect1"></div>
-	
+
 <!--===============================================================================================-->
 	<script src="{% static 'UserAuth/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
 <!--===============================================================================================-->

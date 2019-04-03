@@ -1,4 +1,5 @@
 from rest_framework.views import APIView
+from django.http import HttpResponse
 from rest_framework.response import Response
 from django.http import JsonResponse
 from django.contrib.auth import authenticate
@@ -15,7 +16,7 @@ from .Serializers import OptionSerializer
 from .Qr import GenerateQrCode
 import re
 import os
-import datetime
+import random
 
 # Create your views here.
 
@@ -431,26 +432,34 @@ class QuestionCommentsView(APIView):
 
 
 class GenerateQrCodeView(APIView):
+
     @check_session
     def post(self, request, session_key):
-        session_req = re.compile(r'([A-Za-z0-9]+)-([A-Za-z0-9]+)-([A-Za-z0-9]+)')
-        ssname = session_req.search(session_key).group(1)
-        timenow = datetime.datetime.now()
-        qrname = ssname + timenow.second() + timenow.hour()
-        newqr = GenerateQrCode(request.data['data'], qrname)
+        (newqr,qrname) = Makeqrfrom(session_key,request.data['data'])
         if newqr:
             return Response({"name": qrname, "code": 1},
                             status=status.HTTP_200_OK)
         return Response({"code": 0}, status=status.HTTP_400_BAD_REQUEST)
 
 
+def generate_random():
+    return random.randint(1, 1001)
+
+def Makeqrfrom(session_key, data):
+    session_req = re.compile(r'([A-Za-z0-9]+)-([A-Za-z0-9]+)-([A-Za-z0-9]+)')
+    ssname = session_req.search(session_key).group(1)
+    qrname = ssname + str(generate_random())+"qr_"+str(generate_random())
+    return (GenerateQrCode(data, qrname),qrname)
+
+
 class QrCodeDetails(APIView):
     @check_session
     def get(self, request, session_key, qrname):
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        storage_path = os.path.join(BASE_DIR, 'media/qrcodes')
+        storage_path = os.path.join(BASE_DIR, 'Ars/templates/media/qrcodes')
         image_path = os.path.join(storage_path, qrname + '.png')
-        return render(request, image_path, {})
+        qr_code_data = open(image_path, "rb").read()
+        return HttpResponse(qr_code_data, content_type="image/png")
 
 
 class LoginApiView(APIView):

@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from .views import SessionListView, SessionView, QuestionsView, QuestionsDetailView, SessionSubmissionview, SubmissionView, SubmissionDetailsView, OptionsView, QuestionOptions, OptionDetailsView, CommentsView, QuestionCommentsView, GenerateQrCodeView, QrCodeDetails
 
+app_name = 'Ars'
 
 urlpatterns = [
 
@@ -16,9 +17,9 @@ urlpatterns = [
 			url(r'^option/(?P<pk>[0-9]+)/$',OptionDetailsView.as_view(),name='optionsdetails'),
 
 			url(r'^qrcodes/$', GenerateQrCodeView.as_view(), name='generateqrcode'),
-			url(r'^qrcodes/(?P<qrname>[a-zA-Z0-9]+)/$', QrCodeDetails.as_view(), name='qrcode_details'),
-			
+			url(r'^qrcodes/(?P<qrname>[a-zA-Z0-9_.]+)/$', QrCodeDetails.as_view(), name='qrcode_details'),
+
 			url(r'^comments/$',CommentsView.as_view(),name='commentscreate'),
-			url(r'^question/(?P<question_pk>[0-9]+)/comments/$',QuestionCommentsView.as_view(),name='questioncomments')
+			url(r'^topic/(?P<question_pk>[0-9]+)/comments/$',QuestionCommentsView.as_view(),name='questioncomments')
 
 ]

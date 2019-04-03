@@ -1,0 +1,157 @@
+{% extends 'moderator/base.html'%}
+{%block body%}
+
+<!--main content start-->
+<section id="main-content">
+  <section class="wrapper">
+    <!-- /row -->
+    <div class="row content-panel">
+      <h2 class="centered">DISCUSSIONS</h2>
+      <div class="col-md-10 col-md-offset-1 mt mb">
+        <div class="accordion" id="accordion1">
+          {%for topic in topics%}
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTopic-{{topic.id}}">
+                <em class="glyphicon glyphicon-chevron-right icon-fixed-width"></em>{{topic.topic_name}}
+                </a>
+            </div>
+            <div id="collapseTopic-{{topic.id}}" class="accordion-body collapse in">
+              <div class="accordion-inner">
+                <a href="{% url 'moderator:viewPresentation' 'test' %}">
+                  <h5><i class="fa fa-bar-chart"></i> View Response Presentation</h5>
+                </a>
+                  {%if topic.qr_link_name is not None %}
+                <a href="{% url 'Ars:qrcode_details' session_key topic.qr_link_name %}">
+                  <h5><i class="fa fa-qrcode"></i> View QrCode</h5>
+                </a>
+                {%endif%}
+                <a href="#" onclick="
+                var result = confirm('Are you sure you wish to delete this topic?');
+                    if( result ){
+                            event.preventDefault();
+                            document.getElementById('delete-form-topic-{{topic.id}}').submit();
+                    }
+                        " >
+                    <h5><i class="fa fa-trash-o"></i> Delete topic</h5>
+                </a>
+                <form id="delete-form-topic-{{topic.id}}" action="{% url 'moderator:topicDelete' topic.session.id topic.id %}"
+                  method="POST" style="display: none;">
+                  {% csrf_token %}
+                  <input type="hidden" class="btn btn-xs" name="_method" value="delete">
+                  </form>
+              </div>
+            </div>
+          </div>
+          {%empty%}
+          <p>
+            <h4 class="centered">
+            Session does not contain any topics yet!!
+            </h4>
+          </p>
+          {%endfor%}
+        </div>
+        <!-- end accordion -->
+      </div>
+      <!-- col-md-10 -->
+    </div>
+    <div class="row">
+      <p></p>
+    </div>
+
+    <div class="row content-panel">
+      <h2 class="centered">POLLS</h2>
+      <div class="col-md-10 col-md-offset-1 mt mb">
+        <div class="accordion" id="accordion2">
+          {%for poll in polls%}
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsePoll-{{poll.id}}">
+                <em class="glyphicon glyphicon-chevron-right icon-fixed-width"></em>{{poll.question}}
+                </a>
+            </div>
+            <div id="collapsePoll-{{poll.id}}" class="accordion-body collapse in">
+              <div class="accordion-inner">
+                <a href="#">
+                  <h5><i class="fa fa-bar-chart"></i> View Response Presentation</h5>
+                </a>
+                {%if poll.qr_link_name is not None %}
+                <a href="{% url 'Ars:qrcode_details' session_key poll.qr_link_name %}">
+                  <h5><i class="fa fa-qrcode"></i> View QrCode</h5>
+                </a>
+                {%endif%}
+                <a href="#" onclick="
+                var result = confirm('Are you sure you wish to delete this question?');
+                    if( result ){
+                            event.preventDefault();
+                            document.getElementById('delete-form-poll-{{poll.id}}').submit();
+                    }
+                        " >
+                    <h5><i class="fa fa-trash-o"></i> Delete question</h5>
+                </a>
+                <form id="delete-form-poll-{{poll.id}}" action="{% url 'moderator:questionDelete' poll.session.id poll.id %}"
+                  method="POST" style="display: none;">
+                  {% csrf_token %}
+                  <input type="hidden" class="btn btn-xs" name="_method" value="delete">
+                  </form>
+            </div>
+            </div>
+          </div>
+          {%empty%}
+          <p>
+            <h4 class="centered">
+            Session does not contain polls yet!!
+            </h4>
+          </p>
+          {%endfor%}
+        </div>
+        <!-- end accordion -->
+      </div>
+      <!-- col-md-10 -->
+    </div>
+    <div class="row">
+      <p></p>
+    </div>
+
+    <div class="row content-panel">
+      <h2 class="centered">SUBMISSIONS</h2>
+      <div class="col-md-10 col-md-offset-1 mt mb">
+        <div class="accordion" id="accordion3">
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapseOne3">
+                <em class="glyphicon glyphicon-chevron-right icon-fixed-width"></em>Submissions
+                </a>
+            </div>
+            <div id="collapseOne3" class="accordion-body collapse in">
+              <div class="accordion-inner">
+                {%for submission in submissions%}
+                <a href="#">
+                  <h5><i class="fa fa-bar-chart"></i> View Response Presentation</h5>
+                </a>
+                <a href="#">
+                  <h5><i class="fa fa-qrcode"></i> View QrCode</h5>
+                </a>
+                {%empty%}
+                <p>
+                  <h4 class="centered">
+                  Session does not contain submissions yet!!
+                  </h4>
+                </p>
+                {%endfor%}
+            </div>
+            </div>
+          </div>
+        </div>
+        <!-- end accordion -->
+      </div>
+      <!-- col-md-10 -->
+    </div>
+    <!--  /row -->
+  </section>
+  <!-- /wrapper -->
+</section>
+<!-- /MAIN CONTENT -->
+<!--main content end-->
+
+{%endblock%}

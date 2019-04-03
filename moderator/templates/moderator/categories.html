@@ -1,0 +1,101 @@
+{% extends 'moderator/base.html' %}
+
+{%block body%}
+
+<section id="main-content">
+  <section class="wrapper">
+    <div class="row mt">
+      <!-- /col-lg-12 -->
+      <div class="col-lg-12 mt">
+        <div class="row content-panel">
+          <div class="panel-heading">
+            <ul class="nav nav-tabs nav-justified">
+              <li class="active">
+                <a data-toggle="tab" href=""><h4><strong>Categories</strong></h4></a>
+              </li>
+            </ul>
+          </div>
+          <!-- /panel-heading -->
+          <div class="panel-body">
+            <div class="tab-content">
+              <div id="overview" class="tab-pane active">
+                <div class="row">
+                  <!-- <div class=""> -->
+                    <div class="col-md-6 col-lg-6 detailed mt">
+                      <h4>Select Category</h4>
+                      <div class="recent-activity">
+                        <div class="activity-icon bg-theme"><i class="fa fa-check"></i></div>
+                        <div class="activity-panel">
+                          <a href="" data-toggle="modal" data-target="#createpollquestion_Modal">
+                          <h5><i class="fa fa-plus"></i> NEW POLL</h5>
+                          </a>
+                          <p>Allows you to set question and options</p>
+                        </div>
+                        <div class="activity-icon bg-theme02"><i class="fa fa-desktop"></i></div>
+                        <div class="activity-panel">
+                          <a href="" data-toggle="modal" data-target="#createtopicquestion_Modal">
+                          <h5> <i class="fa fa-plus"></i> DISCUSSION </h5>
+                          </a>
+                          <p>Allows you to set topic for discussion</p>
+                        </div>
+                        <div class="activity-icon bg-theme04"><i class="fa fa-folder-open"></i></div>
+                        <div class="activity-panel">
+                          <a href="" data-toggle="modal" data-target="#createsession_Modal">
+                          <h5> <i class="fa fa-plus"></i> SUBMISSION </h5>
+                          </a>
+                          <p>Creates link for file submission</p>
+                        </div>
+                      </div>
+                      <!-- /recent-activity -->
+                    </div>
+                    <!-- /detailed -->
+                  <!-- </div> -->
+                  <!-- /col-md-6 -->
+                  <div class="col-md-6 detailed">
+                    <h4>All Sessions Stats</h4>
+                    <div class="row centered mt mb">
+                      <div class="col-md-12">
+                        <h1><i class="fa fa-check-circle"></i></h1>
+                        <h3>{{polls_count}}</h3>
+                        <h6>POLL SESSION(S)</h6>
+                      </div>
+                      <div class="col-md-12">
+                        <h1><i class="fa fa-desktop"></i></h1>
+                        <h3>{{topic_count}}</h3>
+                        <h6>DISCUSSION(TOPIC) SESSION(S)</h6>
+                      </div>
+                      <div class="col-md-12">
+                        <h1><i class="fa fa-folder-open"></i></h1>
+                        <h3>0</h3>
+                        <h6>SUBMISSION SESSION(S)</h6>
+                      </div>
+                    </div>
+                    <!-- /row -->
+
+                    <!-- /row -->
+                  </div>
+                  <!-- /col-md-6 -->
+                </div>
+                <!-- /OVERVIEW -->
+              </div>
+
+            </div>
+            <!-- /tab-content -->
+          </div>
+          <!-- /panel-body -->
+        </div>
+        <!-- /col-lg-12 -->
+      </div>
+      <!-- /row -->
+    </div>
+    <!-- /container -->
+  </section>
+  <!-- /wrapper -->
+  {%include 'moderator/modals/createtopicquestion.html' %}
+  {%include 'moderator/modals/createpollquestion.html' %}
+
+</section>
+<!-- /MAIN CONTENT -->
+<!--main content end-->
+
+{%endblock%}

@@ -1,4 +1,4 @@
-   
+
 {% extends 'moderator/base.html' %}
 
 {% block body%}
@@ -10,11 +10,17 @@
             <div class="row mt">
               <!-- SERVER STATUS PANELS -->
               <div class="col-md-3 col-sm-12 mb">
-                <div class="grey-panel pn donut-chart">
+                <div class="grey-panel pn">
                   <div class="grey-header">
                     <h5>SESSIONS</h5>
                   </div>
-                  <h1 class="mt fa fa-4x">21</h1>
+                  <h1 class="mt fa fa-4x">
+                  {%if sessions%}
+                      {{sessions.count}}
+                  {%else%}
+                    0
+                  {%endif%}
+              </h1>
                   <div class="row">
                     <div class="col-sm-6 col-xs-6 goleft">
                       <p><br/></p>
@@ -28,17 +34,22 @@
               </div>
               <!-- /col-md-4-->
               <div class="col-md-3 col-sm-12 mb">
-                <div class="darkblue-panel pn">
-                  <div class="darkblue-header">
+                <div class=" green-panel  pn">
+                  <div class="green-header ">
                     <h5>ACTIVE SESSIONS</h5>
                   </div>
-                                    <h1 class="mt fa fa-4x">21</h1>
+                                    <h1 class="mt fa fa-4x">
+                                      {%if sessions%}
+                                      {{active_count}}
+                                      {%else%}
+                                      0
+                                      {%endif%}
+                                    </h1>
                   <footer>
                     <div class="pull-left">
-                      <h5><i class="fa fa-hdd-o"></i> 17 GB</h5>
+
                     </div>
                     <div class="pull-right">
-                      <h5>60% Used</h5>
                     </div>
                   </footer>
                 </div>
@@ -47,21 +58,30 @@
               <!-- /col-md-4 -->
               <div class="col-md-3 col-sm-12 mb">
                 <!-- REVENUE PANEL -->
-                <div class="green-panel pn">
-                  <div class="green-header">
+                <div class="darkblue-panel pn">
+                  <div class="darkblue-header">
                     <h5><i class=" fa fa-moon-o"></i> INACTIVE SESSIONS</h5>
                   </div>
-                                    <h1 class="mt fa fa-4x">21</h1>
-                  <p class="mt"><b>$ 17,980</b><br/>Month Income</p>
+                                    <h1 class="mt fa fa-4x">
+                                      {%if sessions%}
+                                        {{inactive_count}}
+                                      {%else%}
+                                        0
+                                      {%endif%}
+                                    </h1>
+                  <p class="mt"></p>
                 </div>
               </div>
 
                  <div class="col-md-3 col-sm-12 mb">
-                <div class="darkblue-panel pn">
-                  <div class="darkblue-header">
+                <div class="grey-panel pn">
+                  <div class="grey-header">
                     <h5>CREATE SESSION</h5>
                   </div>
-                  <h1 class="mt"><i class="fa fa-plus fa-3x"></i></h1>
+                  <a href="" data-toggle="modal" data-target="#createsession_Modal">
+                    <h1 class="mt"><i class="fa fa-plus fa-3x"></i></h1>
+                  </a>
+
                   <p>start new session</p>
                   <footer>
                     <div class="centered">
@@ -83,29 +103,45 @@
                 <hr>
                 <thead>
                   <tr>
+                    <th>No.</th>
                     <th><i class="fa fa-key"></i>Session Key</th>
                     <!-- <th class="hidden-phone"><i class="fa fa-question-circle"></i>Status</th> -->
                     <th><i class="fa fa-calendar"></i> Created On</th>
                     <th><i class=" fa fa-edit"></i> Status</th>
-                    <th></th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
+                  {%if sessions%}
+                  {%for session in sessions%}
                   <tr>
+                    <td>{{forloop.counter}}</td>
                     <td>
-                      <a href="basic_table.html#">Session 1</a>
+                      <a href="{% url 'moderator:sessionDetails' session.id %}">{{session.session_key}}</a>
                     </td>
-                    <td class="hidden-phone">Lorem Ipsum dolor</td>
-                    <td><span class="label label-info label-mini">Due</span></td>
+                    <td class="hidden-phone">{{session.created_on}}</td>
+                    <td><span class="label label-info label-mini">{{session.status}}</span></td>
                     <td>
-                    <a href="" class="btn btn-success btn-xs">
-                        <!-- <a href=""> -->
-                          <i class="fa fa-eye"></i>
-                      <!-- </a> -->
-                    </a>
+                          <a href="{% url 'moderator:categorycreate' session.id %}">
+                            <span class="label label-success">
+                              <i class="fa fa-plus"></i>
+                            </span>
+                          </a>
+
+                        {%if session.status == "running" %}
+                        <a href="#">
+                          <span class="label label-warning label-mini">Stop</span>
+                        </a>
+                        {%endif%}
+                        <a href="#">
+                          <span class="label label-danger">
+                            <i class="fa fa-trash-o"></i>
+                          </span>
+                        </a>
                     </td>
                   </tr>
-                  
+                  {%endfor%}
+                  {%endif%}
                 </tbody>
               </table>
             </div>
@@ -127,11 +163,12 @@
           <!-- **********************************************************************************************************************************************************
               RIGHT SIDEBAR CONTENT
               *********************************************************************************************************************************************************** -->
-          
+
           <!-- /col-lg-3 -->
         </div>
         <!-- /row -->
       </section>
+      {%include 'moderator/modals/createsession_modal.html' %}
     </section>
 
     {% endblock %}

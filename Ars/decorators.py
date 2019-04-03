@@ -34,6 +34,15 @@ def Get_check(function):
         raise Exception("request is null")
     return wrapper
 
+def Del_check(function):
+    def wrapper(request, **kwargs):
+        if request is not None:
+            if request.method == "DELETE":
+                return function(request, **kwargs)
+            raise Exception("method not allowed.")
+        raise Exception("request is null")
+    return wrapper
+
 
 def Post_check(function):
     def wrapper(request, **kwargs):

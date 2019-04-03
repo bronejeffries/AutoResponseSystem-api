@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from Ars.decorators import Get_check
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from Ars.Serializers import UserSerializer
@@ -23,7 +25,7 @@ def index(request):
 			return HttpResponseRedirect(reverse('moderator:index'))
 		else:
 			return render(request,"UserAuth/index.html",context,status=status.HTTP_400_BAD_REQUEST)
-	
+
 
 def signupview(request):
 	if request.method=='GET':
@@ -51,3 +53,9 @@ def signupview(request):
 			print(context)
 			return render(request,"UserAuth/signup.html",context)
 		return render(request,"UserAuth/signup.html",context)
+
+@Get_check
+@login_required
+def logoutview(request):
+	logout(request)
+	return HttpResponseRedirect(reverse('UserAuth:index'))

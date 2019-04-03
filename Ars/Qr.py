@@ -24,9 +24,9 @@ class GenerateQrCode(object):
 # # Create an image from the QR Code instance
         img = qr.make_image()
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        storage_path = os.path.join(BASE_DIR, 'media/qrcodes')
+        storage_path = os.path.join(BASE_DIR, 'Ars/templates/media/qrcodes')
 
 # # Save it somewhere, change the extension as needed:
         img.save(os.path.join(storage_path, name + ".png"))
-        print("DONE")
+        # print("DONE")
         return qr
