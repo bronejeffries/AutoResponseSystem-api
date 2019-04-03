@@ -25,6 +25,5 @@ def getPresentation(request,name):
 @Get_check
 def viewPresentation(request,name):
     scheme = request.is_secure() and "https" or "http"
-    print( request.META['REMOTE_HOST'])
     pathheader = scheme+"://"+request.META['HTTP_HOST']
     return render(request,'moderator/viewpresentation.html',{'presentationname':name,'pathheader':pathheader})
