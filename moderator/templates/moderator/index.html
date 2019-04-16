@@ -120,20 +120,19 @@
                       <a href="{% url 'moderator:sessionDetails' session.id %}">{{session.session_key}}</a>
                     </td>
                     <td class="hidden-phone">{{session.created_on}}</td>
-                    <td><span class="label label-info label-mini">{{session.status}}</span></td>
+                    <td><span class="label label-{% if session.status == 'stopped'%}danger{% else %}info{% endif %} label-mini">{{session.status}}</span></td>
                     <td>
+                      {%if session.status == "running" %}
                           <a href="{% url 'moderator:categorycreate' session.id %}">
                             <span class="label label-success">
                               <i class="fa fa-plus"></i>
                             </span>
                           </a>
-
-                        {%if session.status == "running" %}
-                        <a href="#">
+                        <a href="{% url 'moderator:sessionstop' session.id %}">
                           <span class="label label-warning label-mini">Stop</span>
                         </a>
                         {%endif%}
-                        <a href="#">
+                        <a href="{% url 'moderator:sessiondelete' session.id %}">
                           <span class="label label-danger">
                             <i class="fa fa-trash-o"></i>
                           </span>

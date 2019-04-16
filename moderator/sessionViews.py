@@ -39,6 +39,23 @@ def sessionCreate(request):
 
 @login_required
 @Get_check
+def delete_session(request, session_pk):
+    session = get_session_by_id(session_pk)
+    if session:
+        session.delete()
+        return HttpResponseRedirect(reverse('moderator:index'))
+
+@login_required
+@Get_check
+def stop_session(request, session_pk):
+    session = get_session_by_id(session_pk)
+    if session:
+        session.status = "stopped"
+        session.save()
+        return HttpResponseRedirect(reverse('moderator:index'))
+
+@login_required
+@Get_check
 def sessionDetails(request,session_pk):
     details = {}
     session = get_session_by_id(session_pk)
