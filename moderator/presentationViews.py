@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from pptx import Presentation
 from Ars.decorators import Get_check,Post_check
-import io
+import io, random
 from pptx.chart.data import CategoryChartData
 from pptx.enum.chart import XL_CHART_TYPE
 from pptx.util import Inches
