@@ -8,11 +8,30 @@ from Ars.views import generate_random
 from pptx.chart.data import CategoryChartData
 from pptx.enum.chart import XL_CHART_TYPE
 from pptx.util import Inches
+from Ars.models import Session, Topic, Question
+# from .categoryViews import get_Question
 
+def get_Question(pk):
+    question = None
+    try:
+        question = Question.objects.get(id=pk)
+    except Question.DoesNotExist:
+        return False
+    else:
+        return question
 
-def makeQuestionPresentation(question_id,options):
+def question_options(question):
+     options = question.option_set.all()
+     return options
+
+def makeQuestionPresentation(question_id,options = None, name = None):
     # path
-    presentation_name = question_id+ "_" + str(generate_random())
+    presentation_name = ""
+    if name is not None:
+        presentation_name = name
+    else:
+        presentation_name = question_id+ "_" + str(generate_random())
+
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     storage_path = os.path.join(BASE_DIR, 'moderator/presentations')
     presentation_path = os.path.join(storage_path, presentation_name + '.pptx')
@@ -23,7 +42,12 @@ def makeQuestionPresentation(question_id,options):
     # define chart bar data
     chart_data = CategoryChartData()
     chart_data.categories = [ n+1 for n in range(len(options)) ]
-    chart_data.add_series('series 1',tuple([0 for n in range(len(options))]))
+    question = get_Question(question_id)
+    question_options_choices = [0 for n in range(len(options))]
+    if question:
+        question_options = question_options(question)
+        question_options_choices = [option.choices for option in question_options]
+    chart_data.add_series('series 1', tuple(question_options_choices))
 
     # add chart to slide
     x, y, cx, cy = Inches(2), Inches(2), Inches(6), Inches(4.5)
