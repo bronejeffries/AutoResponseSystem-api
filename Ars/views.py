@@ -17,6 +17,7 @@ from .Qr import GenerateQrCode
 import re
 import os
 import random
+from moderator.presentationViews import makeQuestionPresentation as mQp
 
 # Create your views here.
 
@@ -384,6 +385,7 @@ class OptionDetailsView(APIView):
         if option:
             option.choices = int(option.choices) + int(1)
             option.save()
+            mQp(option.question.id, option.question.presentation_name)
             serializer_class = OptionSerializer(option)
             return Response(serializer_class.data,
                             status=status.HTTP_201_CREATED)

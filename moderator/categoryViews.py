@@ -134,7 +134,7 @@ def createOptions(request):
             session_key = question.session.session_key
             qrdata = "http://"+request.META['HTTP_HOST']+"/api/"+session_key+"/question/"+str(question_id)+"/options/"
             (newqr,name) = Makeqrfrom(session_key,qrdata)
-            (prs, presentation_name) =  mqp(question_id, options)
+            (prs, presentation_name) =  mqp(question_id)
             if newqr is not None:
                 question.qr_link_name = name
                 question.presentation_name = presentation_name if presentation_name is not None else null

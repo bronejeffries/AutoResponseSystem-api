@@ -4,12 +4,14 @@ from django.shortcuts import render
 from pptx import Presentation
 from Ars.decorators import Get_check,Post_check
 import io
-from Ars.views import generate_random
 from pptx.chart.data import CategoryChartData
 from pptx.enum.chart import XL_CHART_TYPE
 from pptx.util import Inches
 from Ars.models import Session, Topic, Question
 # from .categoryViews import get_Question
+
+def generate_random():
+    return random.randint(1, 1001)
 
 def get_Question(pk):
     question = None
@@ -24,7 +26,7 @@ def question_options(question):
      options = question.option_set.all()
      return options
 
-def makeQuestionPresentation(question_id,options = None, name = None):
+def makeQuestionPresentation(question_id, name = None):
     # path
     presentation_name = ""
     if name is not None:
@@ -41,12 +43,14 @@ def makeQuestionPresentation(question_id,options = None, name = None):
 
     # define chart bar data
     chart_data = CategoryChartData()
-    chart_data.categories = [ n+1 for n in range(len(options)) ]
     question = get_Question(question_id)
-    question_options_choices = [0 for n in range(len(options))]
+    question_options_choices = None
+    question_options_list = None
     if question:
-        question_options = question_options(question)
-        question_options_choices = [option.choices for option in question_options]
+        question_options_list = question_options(question)
+        question_options_choices = [option.choices for option in question_options_list]
+
+    chart_data.categories = [ n+1 for n in range(len(question_options_list)) ]
     chart_data.add_series('series 1', tuple(question_options_choices))
 
     # add chart to slide
