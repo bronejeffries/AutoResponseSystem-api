@@ -72,7 +72,7 @@
             </div>
             <div id="collapsePoll-{{poll.id}}" class="accordion-body collapse in">
               <div class="accordion-inner">
-                <a href="#">
+                <a href="{% url 'moderator:viewPresentation' poll.presentation_name %}">
                   <h5><i class="fa fa-bar-chart"></i> View Response Presentation</h5>
                 </a>
                 {%if poll.qr_link_name is not None %}

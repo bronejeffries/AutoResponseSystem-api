@@ -19,7 +19,8 @@ class Submission(models.Model):
 class Topic(models.Model):
     topic_name = models.CharField(max_length=250, null=False)
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
-    qr_link_name = models.CharField(max_length=25, null=True)    
+    qr_link_name = models.CharField(max_length=25, null=True)
+    presentation_name = models.CharField(max_length=25, null=True)
 
 
 class Comment(models.Model):
@@ -32,6 +33,7 @@ class Question(models.Model):
     question = models.CharField(max_length=350, null=False)
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
     qr_link_name = models.CharField(max_length=25, null=True)
+    presentation_name = models.CharField(max_length=25, null=True) 
 
 
 class Option(models.Model):

@@ -6,6 +6,7 @@ from Ars.decorators import Get_check,Post_check
 from Ars.models import Session, Topic, Question
 from Ars.Serializers import SessionSerializer, TopicSerializer, QuestionSerializer, OptionSerializer
 from Ars.views import Makeqrfrom
+from .presentationViews import makeQuestionPresentation as mqp
 
 @login_required
 @Post_check
@@ -114,7 +115,7 @@ def createOptionsIndex(request,question_pk):
 @Post_check
 def createOptions(request):
     postdata = request.POST
-    options = postdata.getlist('options')
+    options = postdata.getlist('options[]')
     question_id = postdata['question_pk']
     success = True
     for option in options:
@@ -133,8 +134,10 @@ def createOptions(request):
             session_key = question.session.session_key
             qrdata = "http://"+request.META['HTTP_HOST']+"/api/"+session_key+"/question/"+str(question_id)+"/options/"
             (newqr,name) = Makeqrfrom(session_key,qrdata)
+            (prs, presentation_name) =  mqp(question_id, options)
             if newqr is not None:
                 question.qr_link_name = name
+                question.presentation_name = presentation_name if presentation_name is not None else null
                 updated_question = updateQuestion(question)
                 if updated_question:
                     session_pk = question.session.id
