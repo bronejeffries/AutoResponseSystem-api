@@ -1,9 +1,12 @@
+aioredis
+asgi-redis
 asgiref
 async-timeout
 attrs
 autobahn
 Automat
 channels
+channels-redis
 constantly
 daphne
 dj-database-url
@@ -11,10 +14,13 @@ Django
 django-heroku
 djangorestframework
 gunicorn
+hiredis
 hyperlink
 idna
 incremental
 lxml
+msgpack
+msgpack-python
 mysqlclient
 Pillow
 psycopg2
@@ -23,6 +29,7 @@ pypng
 python-pptx
 pytz
 qrcode
+redis
 six
 Twisted
 txaio

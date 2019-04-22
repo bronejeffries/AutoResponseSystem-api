@@ -32,7 +32,7 @@ def makeQuestionPresentation(question_id, name = None):
     if name is not None:
         presentation_name = name
     else:
-        presentation_name = question_id+ "_" + str(generate_random())
+        presentation_name = str(question_id)+ "_" + str(generate_random())
 
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     storage_path = os.path.join(BASE_DIR, 'moderator/presentations')

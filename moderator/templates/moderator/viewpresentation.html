@@ -1,5 +1,6 @@
 {%extends 'moderator/base.html' %}
 {%block body%}
+{% load staticfiles %}
 <section id="main-content">
   <section class="wrapper">
     <div class="row mt">
@@ -11,4 +12,5 @@
   </section>
   <!-- /wrapper -->
 </section>
+<script src="{% static 'moderator/lib/websockets_custom.js' %}" charset="utf-8"></script>
 {% endblock %}
