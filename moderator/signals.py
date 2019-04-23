@@ -13,17 +13,13 @@ def announce_option_create(sender, instance, created, **kwargs):
         question = instance.question
         presentation_name = question.presentation_name
         if presentation_name is not None:
-            presentationViews.makeQuestionPresentation(question.id, name = presentation_name)
-            async_to_sync(channel_layer.group_send)(
-                "moderators",{
-                    "type":"moderator.announce",
-                    "event": "Options Update"
-                }
-            )
-        else:
-            async_to_sync(channel_layer.group_send)(
-                "moderators",{
-                    "type":"moderator.announce",
-                    "event": "Options save"
-                }
-            )
+            try:
+                presentationViews.makeQuestionPresentation(question.id, name = presentation_name)
+                async_to_sync(channel_layer.group_send)(
+                    "moderators",{
+                        "type":"moderator.announce",
+                        "event": "Options Update"
+                    }
+                )
+            except ConnectionClosedError:
+                return 0
