@@ -39,7 +39,7 @@ def createTopic(request):
         new_topic.save()
         session_key=Session.objects.get(id=session_pk).session_key
         current_topic_id = new_topic.data['id']
-        qrdata = "http://"+request.META['HTTP_HOST']+"/api/"+session_key+"/topic/"+str(current_topic_id)+"/comments/"
+        qrdata = request.scheme +"://"+request.META['HTTP_HOST']+"/api/"+session_key+"/topic/"+str(current_topic_id)+"/comments/"
         # print(qrdata)
         (newqr,name) = Makeqrfrom(session_key,qrdata)
         if newqr is not None:
@@ -132,7 +132,7 @@ def createOptions(request):
         question = get_Question(question_id)
         if question:
             session_key = question.session.session_key
-            qrdata = "http://"+request.META['HTTP_HOST']+"/api/"+session_key+"/question/"+str(question_id)+"/options/"
+            qrdata = request.scheme+"://"+request.META['HTTP_HOST']+"/api/"+session_key+"/question/"+str(question_id)+"/options/"
             (newqr,name) = Makeqrfrom(session_key,qrdata)
             (prs, presentation_name) =  mqp(question_id)
             if newqr is not None:
