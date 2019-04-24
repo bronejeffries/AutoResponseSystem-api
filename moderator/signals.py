@@ -24,3 +24,5 @@ def announce_option_create(sender, instance, created, **kwargs):
                 )
             except ConnectionClosedError:
                 print("redis error","connection closed")
+    else:
+        print("Channel message not sent::......")            
