@@ -23,4 +23,4 @@ def announce_option_create(sender, instance, created, **kwargs):
                     }
                 )
             except ConnectionClosedError:
-                return 0
+                print("redis error","connection closed")
