@@ -9,7 +9,7 @@ from asgiref.sync import async_to_sync
 @receiver(post_save, sender= Option)
 def announce_option_create(sender, instance, created, **kwargs):
     print("signal dispatched ...... \n")
-    if created:
+    if instance:
         channel_layer = get_channel_layer()
         question = instance.question
         presentation_name = question.presentation_name
