@@ -6,7 +6,8 @@ from Ars.decorators import Get_check,Post_check
 from Ars.models import Session, Topic, Question
 from Ars.Serializers import SessionSerializer, TopicSerializer, QuestionSerializer, OptionSerializer
 from Ars.views import Makeqrfrom
-from .presentationViews import makeQuestionPresentation as mqp
+from .presentationViews import (makeQuestionPresentation as mqp,
+                                makeTopicpresentation as mtp )
 
 @login_required
 @Post_check
@@ -42,9 +43,11 @@ def createTopic(request):
         qrdata = request.scheme +"://"+request.META['HTTP_HOST']+"/api/"+session_key+"/topic/"+str(current_topic_id)+"/comments/"
         # print(qrdata)
         (newqr,name) = Makeqrfrom(session_key,qrdata)
+        (prs, presentation_name) = mtp(current_topic_id)
         if newqr is not None:
             new_topic_instance = new_topic.data
             new_topic_instance['qr_link_name'] = name
+            new_topic_instance['presentation_name'] = presentation_name if presentation_name is not None else "null"
             del new_topic_instance['id']
             current_topic = Topic.objects.get(id=current_topic_id)
             updated_topic = updateTopic(current_topic,new_topic_instance)
@@ -137,7 +140,7 @@ def createOptions(request):
             (prs, presentation_name) =  mqp(question_id)
             if newqr is not None:
                 question.qr_link_name = name
-                question.presentation_name = presentation_name if presentation_name is not None else null
+                question.presentation_name = presentation_name if presentation_name is not None else "null"
                 updated_question = updateQuestion(question)
                 if updated_question:
                     session_pk = question.session.id

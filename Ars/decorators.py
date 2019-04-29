@@ -16,7 +16,7 @@ def check_session(function):
                                                     ).last().status
         finally:
             if session_status is not None:
-                if session_status == "running":
+                if session_status == "running" or request.user is not None:
                     return function(self, request, session_key, **kwargs)
                 return Response({"session_error": "Session not active"},
                                 status=status.HTTP_400_BAD_REQUEST)

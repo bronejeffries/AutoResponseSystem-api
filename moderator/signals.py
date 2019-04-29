@@ -1,10 +1,31 @@
-from Ars.models import Option
+from Ars.models import Option, Comment
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from channels.layers import get_channel_layer
 from . import presentationViews
 from asgiref.sync import async_to_sync
 
+
+@receiver(post_save, sender= Comment)
+def announce_comment_create(sender, instance, created, **kwargs):
+    print("comment signal dispatched...\n")
+    if created:
+        channel_layer = get_channel_layer()
+        topic = instance.topic
+        presentation_name = topic.presentation_name
+        if presentation_name is not None or presentation_name is not "null":
+            try:
+                presentationViews.makeTopicpresentation(topic.id, name = presentation_name)
+                async_to_sync(channel_layer.group_send)(
+                    f"moderator_{presentation_name}",{
+                        "type":"moderator.announce",
+                        "event": "comment created"
+                    }
+                )
+            except ConnectionClosedError:
+                print("redis error on comments","connection closed")
+    else:
+        print("channel message not sent on comments........")
 
 @receiver(post_save, sender= Option)
 def announce_option_create(sender, instance, created, **kwargs):
@@ -17,12 +38,12 @@ def announce_option_create(sender, instance, created, **kwargs):
             try:
                 presentationViews.makeQuestionPresentation(question.id, name = presentation_name)
                 async_to_sync(channel_layer.group_send)(
-                    "moderators",{
+                    f"moderator_{presentation_name}",{
                         "type":"moderator.announce",
                         "event": "Options Update"
                     }
                 )
             except ConnectionClosedError:
-                print("redis error","connection closed")
+                print("redis error on options","connection closed")
     else:
-        print("Channel message not sent::......")            
+        print("Channel message not sent on options::......")

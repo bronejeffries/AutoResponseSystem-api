@@ -18,10 +18,12 @@
             </div>
             <div id="collapseTopic-{{topic.id}}" class="accordion-body collapse in">
               <div class="accordion-inner">
-                <a href="{% url 'moderator:viewPresentation' 'test' %}">
+                {%if topic.presentation_name is not None %}
+                <a href="{% url 'moderator:viewPresentation' topic.presentation_name %}">
                   <h5><i class="fa fa-bar-chart"></i> View Response Presentation</h5>
                 </a>
-                  {%if topic.qr_link_name is not None %}
+                {% endif %}
+                {%if topic.qr_link_name is not None %}
                 <a href="{% url 'Ars:qrcode_details' session_key topic.qr_link_name %}">
                   <h5><i class="fa fa-qrcode"></i> View QrCode</h5>
                 </a>
@@ -72,9 +74,11 @@
             </div>
             <div id="collapsePoll-{{poll.id}}" class="accordion-body collapse in">
               <div class="accordion-inner">
+                {%if poll.presentation_name is not None %}   
                 <a href="{% url 'moderator:viewPresentation' poll.presentation_name %}">
                   <h5><i class="fa fa-bar-chart"></i> View Response Presentation</h5>
                 </a>
+                {% endif %}
                 {%if poll.qr_link_name is not None %}
                 <a href="{% url 'Ars:qrcode_details' session_key poll.qr_link_name %}">
                   <h5><i class="fa fa-qrcode"></i> View QrCode</h5>
