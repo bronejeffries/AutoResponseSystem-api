@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from channels.layers import get_channel_layer
 from . import presentationViews
 from asgiref.sync import async_to_sync
-from aioredis.errors impot ConnectionClosedError
+from aioredis.errors import ConnectionClosedError
 
 
 @receiver(post_save, sender= Comment)
