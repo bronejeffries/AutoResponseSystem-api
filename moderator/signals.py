@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from channels.layers import get_channel_layer
 from . import presentationViews
 from asgiref.sync import async_to_sync
+from aioredis.errors impot ConnectionClosedError
 
 
 @receiver(post_save, sender= Comment)
@@ -53,6 +54,6 @@ def announce_option_create(sender, instance, created, **kwargs):
                     print("redis error on options","connection closed")
                 else:
                     not_sent = False
-                    
+
     else:
         print("Channel message not sent on options::......")
