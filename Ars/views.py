@@ -430,6 +430,29 @@ class QuestionCommentsView(APIView):
                             status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+class TopicDetailView(APIView):
+
+    # retrieves a topic by id
+    def get_topic(self,pk):
+        try:
+            topic = Topic.objects.get(id=pk)
+        except Topic.DoesNotExist:
+            return False
+        else:
+            return topic
+
+    # retrieves a specific topic
+    # @params {Request} request {Topic} topic_pk
+    # @returns JsonResponse topic
+
+    @check_session
+    def get(self, request, session_key, topic_pk):
+        topic = self.get_topic(topic_pk)
+        if topic:
+            serializer_class = TopicSerializer(topic)
+            return Response(serializer_class.data,
+                            status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class GenerateQrCodeView(APIView):
 
