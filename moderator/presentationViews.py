@@ -55,7 +55,7 @@ def makeQuestionPresentation(question_id, name = None):
     prs = Presentation()
     slide = prs.slides.add_slide(prs.slide_layouts[5])
     title = slide.shapes.title
-    title.text = str(question.question)
+    title.text = f"({question.question})\t\n"
 
     # define chart bar data
     chart_data = CategoryChartData()

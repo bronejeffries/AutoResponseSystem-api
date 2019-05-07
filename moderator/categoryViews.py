@@ -29,6 +29,7 @@ def deleteQuestion(request,session_pk,pk):
 @login_required
 @Post_check
 def createTopic(request):
+    scheme = request.is_secure() and "https" or "http"
     topic = request.POST['topic']
     session_pk = request.POST['session_pk']
     data={
@@ -40,7 +41,7 @@ def createTopic(request):
         new_topic.save()
         session_key=Session.objects.get(id=session_pk).session_key
         current_topic_id = new_topic.data['id']
-        qrdata = request.scheme +"://"+request.META['HTTP_HOST']+"/api/"+session_key+"/topic/"+str(current_topic_id)+"/comments/"
+        qrdata = scheme +"://"+request.META['HTTP_HOST']+"/api/"+session_key+"/topic/"+str(current_topic_id)+"/comments/"
         # print(qrdata)
         (newqr,name) = Makeqrfrom(session_key,qrdata)
         (prs, presentation_name) = mtp(current_topic_id)
@@ -117,6 +118,7 @@ def createOptionsIndex(request,question_pk):
 @login_required
 @Post_check
 def createOptions(request):
+    scheme = request.is_secure() and "https" or "http"
     postdata = request.POST
     options = postdata.getlist('options[]')
     question_id = postdata['question_pk']
@@ -135,7 +137,7 @@ def createOptions(request):
         question = get_Question(question_id)
         if question:
             session_key = question.session.session_key
-            qrdata = request.scheme+"://"+request.META['HTTP_HOST']+"/api/"+session_key+"/question/"+str(question_id)+"/options/"
+            qrdata = scheme+"://"+request.META['HTTP_HOST']+"/api/"+session_key+"/question/"+str(question_id)+"/options/"
             (newqr,name) = Makeqrfrom(session_key,qrdata)
             (prs, presentation_name) =  mqp(question_id)
             if newqr is not None:
