@@ -28,6 +28,11 @@
   <!-- Custom styles for this template -->
   <link href="{% static 'moderator/css/style.css' %}" rel="stylesheet">
   <link href="{% static 'moderator/css/style-responsive.css' %}" rel="stylesheet">
+  <style media="screen">
+  html {
+  background-color: #ffffff;
+  /* Or any color / image you want */}
+  </style>
   <script src="{% static 'moderator/lib/chart-master/Chart.js' %}"></script>
 </head>
 
@@ -46,6 +51,7 @@
       <!--logo end-->
       <div class="top-menu">
         <ul class="nav pull-right top-menu">
+          <li>{% block fullscreen_btn %}{%endblock%}</li>
           <li><a class="logout" href="{% url "UserAuth:logout" %}">Logout</a></li>
         </ul>
       </div>
