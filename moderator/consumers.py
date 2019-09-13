@@ -14,7 +14,7 @@ class PresentationUpdateConsumer(AsyncJsonWebsocketConsumer):
         try:
             await self.channel_layer.group_discard(f"moderator_{self.scope['url_route']['kwargs']['name']}", self.channel_name)
         except Exception:
-            prin("Exception occured")
+            print("Exception occured")
 
     async def moderator_announce(self, event):
         await self.send_json(event)
